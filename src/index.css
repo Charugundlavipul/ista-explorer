@@ -1,13 +1,36 @@
+/* src/index.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+  /* dark base color */
+  background-color: #0a0a1a;
+  /* subtle star-dust tiling pattern */
+  background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
+  background-repeat: repeat;
+  background-attachment: fixed;
+  color: #e0e0e0;
+  font-family: 'Orbitron', sans-serif;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* keep the rest of your styles as before… */
+.MuiPaper-root {
+  background-color: rgba(26, 26, 46, 0.85) !important;
+}
+.monaco-editor, .monaco-editor-background {
+  border-radius: 4px;
+  overflow: hidden;
+}
+.MuiButton-contained {
+  text-transform: none;
+  font-weight: bold;
+}
+.MuiDataGrid-columnHeaders {
+  background-color: rgba(0,0,0,0.3);
+  border-bottom: 1px solid #444;
+}
+.MuiDataGrid-cell {
+  border-bottom: 1px solid #333;
 }

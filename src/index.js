@@ -1,17 +1,36 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+// src/index.js
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App'
+import { SnackbarProvider } from 'notistack'
+import { ThemeProvider, createTheme } from '@mui/material'
+import CssBaseline from '@mui/material/CssBaseline'
+import './index.css'                // our cosmic CSS
+
+// create a dark theme
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: { main: '#66ccff' },
+    secondary: { main: '#ff66ff' },
+    background: { default: '#0a0a1a', paper: '#1a1a2e' },
+    text: { primary: '#e0e0e0' },
+  },
+  typography: {
+    fontFamily: '"Orbitron", sans-serif',
+  }
+})
+
+const container = document.getElementById('root')
+const root = ReactDOM.createRoot(container)
 root.render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
+      <SnackbarProvider maxSnack={3}>
+        <App />
+      </SnackbarProvider>
+    </ThemeProvider>
   </React.StrictMode>
-);
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+)
