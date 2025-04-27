@@ -285,7 +285,7 @@ export default function App() {
                 elevation={4}
                 onClick={()=>showInsight(
                   'Tourist Ages by Decade',
-                  `Most ISTA travelers are in their 40s, with roughly 890 adventurers exploring space at mid-career. Those in their 20s and 30s follow close behind, showing strong youthful curiosity. The 50s group has about 450 participants, blending experience with adventure. Seniors in their 60s make up around 90 passionate explorers. Understanding these age trends helps ISTA design personalized experiences—whether it’s health checks, cabin comfort, or mission briefings—tailored to each life stage.`
+                  `Most ISTA travelers are in their 40s, with roughly 875 adventurers exploring space at mid-career. Those in their 20s and 30s follow close behind which is showing strong youthful curiosity. The 50s group has about 450 participants. Seniors in their 60s make up around 45 explorers. Understanding these age trends helps ISTA design personalized experiences—whether it’s health checks, cabin comfort, or mission briefings which are specific to each life stage.`
                 )}
               >
                 <Typography variant="h6">Tourist Ages by Decade</Typography>
@@ -301,7 +301,7 @@ export default function App() {
                   variant="outlined"
                   onClick={() => showInsight(
                     'Tourist Ages by Decade',
-                    `Most ISTA travelers are in their 40s, with roughly 890 adventurers exploring space at mid-career. Those in their 20s and 30s follow close behind, showing strong youthful curiosity. The 50s group has about 450 participants, blending experience with adventure. Seniors in their 60s make up around 90 passionate explorers. Understanding these age trends helps ISTA design personalized experiences—whether it’s health checks, cabin comfort, or mission briefings—tailored to each life stage.`
+                   `Most ISTA travelers are in their 40s, with roughly 875 adventurers exploring space at mid-career. Those in their 20s and 30s follow close behind which is showing strong youthful curiosity. The 50s group has about 450 participants. Seniors in their 60s make up around 45 explorers. Understanding these age trends helps ISTA design personalized experiences—whether it’s health checks, cabin comfort, or mission briefings which are specific to each life stage.`
                   )}
                   sx={{ mt:1 }}
                 >
@@ -317,7 +317,7 @@ export default function App() {
                 elevation={4}
                 onClick={()=>showInsight(
                   'Bookings by Planet',
-                  `Mars-jn18 and Proxima b-ag46 lead with 10 bookings each, confirming their fame among space tourists. Close behind, Kepler-452b and other Proxima sites each register nine reservations, highlighting interest in exotic worlds. A handful of other planets see seven or eight passengers, showing a healthy spread of curiosity. These insights guide ISTA’s route planning, ensuring we allocate spacecraft and crew where demand is highest while still offering adventures to emerging destinations.`
+                  `Mars-jn18 and Proxima b-ag46 lead with 10 bookings each, Close behind, Kepler-452b and other Proxima sites each register nine reservations whichhigh lights interest in exotic worlds. A handful of other planets see seven or eight passengers, showing a healthy spread of curiosity. These insights guide ISTA’s route planning, ensuring we allocate spacecraft and crew where demand is highest while still offering adventures to these destinations.`
                 )}
               >
                 <Typography variant="h6">Bookings by Planet</Typography>
@@ -333,7 +333,7 @@ export default function App() {
                   variant="outlined"
                   onClick={() => showInsight(
                     'Bookings by Planet',
-                    `Mars-jn18 and Proxima b-ag46 lead with 10 bookings each, confirming their fame among space tourists. Close behind, Kepler-452b and other Proxima sites each register nine reservations, highlighting interest in exotic worlds. A handful of other planets see seven or eight passengers, showing a healthy spread of curiosity. These insights guide ISTA’s route planning, ensuring we allocate spacecraft and crew where demand is highest while still offering adventures to emerging destinations.`
+                    `Mars-jn18 and Proxima b-ag46 lead with 10 bookings each, Close behind, Kepler-452b and other Proxima sites each register nine reservations whichhigh lights interest in exotic worlds. A handful of other planets see seven or eight passengers, showing a healthy spread of curiosity. These insights guide ISTA’s route planning, ensuring we allocate spacecraft and crew where demand is highest while still offering adventures to these destinations.`
                   )}
                   sx={{ mt:1 }}
                 >
@@ -349,7 +349,7 @@ export default function App() {
                 elevation={4}
                 onClick={()=>showInsight(
                   'Missions per Month',
-                  `ISTA’s monthly launches jump from about 50 up to a reliable 120–150, showcasing rapid growth and consistent demand. That steady plateau holds across seasons, suggesting smooth fleet maintenance and scheduling. We see a slight dip near the period’s end, perhaps due to planned upgrades or seasonal factors. These patterns let ISTA optimize crew rosters, timetable maintenance windows, and plan promotions so every journey remains safe, punctual, and unforgettable.`
+                  `ISTA’s monthly launches jump from about 50 up to a reliable 120–150 which shows rapid growth and consistent demand. That steady plateau holds across seasons which suggests smooth fleet maintenance and scheduling. We see a slight dip near the period’s end, perhaps due to planned upgrades or seasonal factors. These patterns let ISTA optimize crew rosters, timetable maintenance windows, and plan promotions so every journey remains safe.`
                 )}
               >
                 <Typography variant="h6">Missions per Month</Typography>
@@ -365,7 +365,7 @@ export default function App() {
                   variant="outlined"
                   onClick={() => showInsight(
                     'Missions per Month',
-                    `ISTA’s monthly launches jump from about 50 up to a reliable 120–150, showcasing rapid growth and consistent demand. That steady plateau holds across seasons, suggesting smooth fleet maintenance and scheduling. We see a slight dip near the period’s end, perhaps due to planned upgrades or seasonal factors. These patterns let ISTA optimize crew rosters, timetable maintenance windows, and plan promotions so every journey remains safe, punctual, and unforgettable.`
+                    `ISTA’s monthly launches jump from about 50 up to a reliable 120–150 which shows rapid growth and consistent demand. That steady plateau holds across seasons which suggests smooth fleet maintenance and scheduling. We see a slight dip near the period’s end, perhaps due to planned upgrades or seasonal factors. These patterns let ISTA optimize crew rosters, timetable maintenance windows, and plan promotions so every journey remains safe.`
                   )}
                   sx={{ mt:1 }}
                 >
