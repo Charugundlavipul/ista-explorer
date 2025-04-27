@@ -57,10 +57,10 @@ export default function App() {
   const { enqueueSnackbar }     = useSnackbar()
 
   // dashboard state
-  const [bookingsByPlanet, setBookingsByPlanet] = useState([])
-  const [missionsByMonth, setMissionsByMonth]   = useState([])
-  const [crewByRole, setCrewByRole]             = useState([])
-  const [touristAgeDist, setTouristAgeDist]     = useState([])
+  const [bookingsByPlanet, setBookingsByPlanet]   = useState([])
+  const [missionsByMonth, setMissionsByMonth]     = useState([])
+  const [crewByRole, setCrewByRole]               = useState([])
+  const [touristAgeDist, setTouristAgeDist]       = useState([])
 
   // insight panel state
   const [insightOpen, setInsightOpen]   = useState(false)
@@ -73,11 +73,11 @@ export default function App() {
       // 1) Bookings by Planet
       let { data: bp } = await supabase.rpc('execute_sql_json',{ sql_text:
         `SELECT p.name AS planet, COUNT(*) AS total_bookings
- FROM ista.booking b
- JOIN ista.mission m ON b.mission_id=m.mission_id
- JOIN ista.planet p ON m.planet_id=p.planet_id
- GROUP BY p.name
- ORDER BY total_bookings DESC;`
+FROM ista.booking b
+JOIN ista.mission m ON b.mission_id=m.mission_id
+JOIN ista.planet p ON m.planet_id=p.planet_id
+GROUP BY p.name
+ORDER BY total_bookings DESC;`
       })
       if (Array.isArray(bp)) {
         setBookingsByPlanet(bp.map(r=>({
@@ -89,10 +89,10 @@ export default function App() {
       // 2) Missions per Month
       let { data: mm } = await supabase.rpc('execute_sql_json',{ sql_text:
         `SELECT to_char(DATE_TRUNC('month', departure_date),'YYYY-MM') AS month,
-   COUNT(*) AS missions
- FROM ista.mission
- GROUP BY 1
- ORDER BY 1;`
+  COUNT(*) AS missions
+FROM ista.mission
+GROUP BY 1
+ORDER BY 1;`
       })
       if (Array.isArray(mm)) {
         setMissionsByMonth(mm.map(r=>({
@@ -104,10 +104,10 @@ export default function App() {
       // 3) Crew Assignments by Role
       let { data: cr } = await supabase.rpc('execute_sql_json',{ sql_text:
         `SELECT cm.role, COUNT(ca.assignment_id) AS assignments
- FROM ista.crewassignment ca
- JOIN ista.crewmember cm ON ca.crew_id=cm.crew_id
- GROUP BY cm.role
- ORDER BY assignments DESC;`
+FROM ista.crewassignment ca
+JOIN ista.crewmember cm ON ca.crew_id=cm.crew_id
+GROUP BY cm.role
+ORDER BY assignments DESC;`
       })
       if (Array.isArray(cr)) {
         setCrewByRole(cr.map(r=>({
@@ -119,10 +119,10 @@ export default function App() {
       // 4) Tourist Ages by Decade
       let { data: ad } = await supabase.rpc('execute_sql_json',{ sql_text:
         `SELECT floor(date_part('year', age(dob))/10)*10 AS decade,
-   COUNT(*) AS count
- FROM ista.tourist
- GROUP BY 1
- ORDER BY 1;`
+  COUNT(*) AS count
+FROM ista.tourist
+GROUP BY 1
+ORDER BY 1;`
       })
       if (Array.isArray(ad)) {
         setTouristAgeDist(ad.map(r=>({
@@ -133,29 +133,44 @@ export default function App() {
     })()
   }, [])
 
-  // run custom user query
+  // run custom user query (now allows SELECT/INSERT/UPDATE/DELETE)
   const runQuery = async () => {
     const t = sql.trim()
-    if (!/^SELECT/i.test(t)) {
-      enqueueSnackbar('Only SELECT allowed',{variant:'warning'})
+    if (!/^(SELECT|INSERT|UPDATE|DELETE)\b/i.test(t)) {
+      enqueueSnackbar(
+        'Only SELECT, INSERT, UPDATE or DELETE statements are permitted',
+        { variant:'warning' }
+      )
       return
     }
+
     setLoading(true)
-    const { data: jr, error } = await supabase.rpc('execute_sql_json',{ sql_text:t })
+    const { data: jr, error } = await supabase.rpc('execute_sql_json',{ sql_text: t })
     setLoading(false)
+
     if (error) {
       enqueueSnackbar(error.message,{variant:'error'})
       return
     }
-    const data = Array.isArray(jr)?jr:jr?[]:[]
-    if (data.length === 0) {
-      setRows([]); setColumns([])
-      enqueueSnackbar('No rows returned',{variant:'info'})
-      return
+
+    if (/^SELECT\b/i.test(t)) {
+      const data = Array.isArray(jr) ? jr : []
+      if (data.length === 0) {
+        setRows([]); setColumns([])
+        enqueueSnackbar('No rows returned',{variant:'info'})
+        return
+      }
+      const cols = Object.keys(data[0]).map(f=>({
+        field: f, headerName: f, flex: 1
+      }))
+      setColumns(cols)
+      setRows(data.map((r,i)=>( { id:i, ...r } )))
+    } else {
+      enqueueSnackbar(
+        `${t.split(/\s+/)[0].toUpperCase()} executed successfully`,
+        { variant:'success' }
+      )
     }
-    const cols = Object.keys(data[0]).map(f=>({ field:f, headerName:f, flex:1 }))
-    setColumns(cols)
-    setRows(data.map((r,i)=>( { id:i, ...r } )))
   }
 
   // show insight panel
@@ -191,7 +206,6 @@ export default function App() {
                   sx={{ mb:1 }}
                 />
               )}
-              {/* Custom Query Chip */}
               <Chip
                 label="Custom Query"
                 onClick={()=>setSql('')}
@@ -285,7 +299,7 @@ export default function App() {
                 elevation={4}
                 onClick={()=>showInsight(
                   'Tourist Ages by Decade',
-                  `Most ISTA travelers are in their 40s, with roughly 875 adventurers exploring space at mid-career. Those in their 20s and 30s follow close behind which is showing strong youthful curiosity. The 50s group has about 450 participants. Seniors in their 60s make up around 45 explorers. Understanding these age trends helps ISTA design personalized experiences—whether it’s health checks, cabin comfort, or mission briefings which are specific to each life stage.`
+                  `Most ISTA travelers are in their 40s, with roughly 875 adventurers exploring space at mid-career. Those in their 20s and 30s follow close behind, showing youthful curiosity. The 50s group has about 450 participants, and seniors in their 60s make up around 45 explorers. Understanding these age trends helps ISTA design personalized experiences—health checks, cabin comfort, and mission briefings tailored to each life stage.`
                 )}
               >
                 <Typography variant="h6">Tourist Ages by Decade</Typography>
@@ -301,7 +315,7 @@ export default function App() {
                   variant="outlined"
                   onClick={() => showInsight(
                     'Tourist Ages by Decade',
-                   `Most ISTA travelers are in their 40s, with roughly 875 adventurers exploring space at mid-career. Those in their 20s and 30s follow close behind which is showing strong youthful curiosity. The 50s group has about 450 participants. Seniors in their 60s make up around 45 explorers. Understanding these age trends helps ISTA design personalized experiences—whether it’s health checks, cabin comfort, or mission briefings which are specific to each life stage.`
+                    `Most ISTA travelers are in their 40s, with roughly 875 adventurers exploring space at mid-career. Those in their 20s and 30s follow close behind, showing youthful curiosity. The 50s group has about 450 participants, and seniors in their 60s make up around 45 explorers. Understanding these age trends helps ISTA design personalized experiences—health checks, cabin comfort, and mission briefings tailored to each life stage.`
                   )}
                   sx={{ mt:1 }}
                 >
@@ -317,7 +331,7 @@ export default function App() {
                 elevation={4}
                 onClick={()=>showInsight(
                   'Bookings by Planet',
-                  `Mars-jn18 and Proxima b-ag46 lead with 10 bookings each, Close behind, Kepler-452b and other Proxima sites each register nine reservations whichhigh lights interest in exotic worlds. A handful of other planets see seven or eight passengers, showing a healthy spread of curiosity. These insights guide ISTA’s route planning, ensuring we allocate spacecraft and crew where demand is highest while still offering adventures to these destinations.`
+                  `Mars-jn18 and Proxima b-ag46 lead with 10 bookings each. Close behind, Kepler-452b and other Proxima outposts each register nine reservations, highlighting interest in exotic worlds. A handful of destinations see seven or eight passengers, showing a healthy spread of curiosity. These insights guide ISTA’s route planning—allocating spacecraft and crew where demand is highest while still offering adventures across our entire planetary roster.`
                 )}
               >
                 <Typography variant="h6">Bookings by Planet</Typography>
@@ -333,7 +347,7 @@ export default function App() {
                   variant="outlined"
                   onClick={() => showInsight(
                     'Bookings by Planet',
-                    `Mars-jn18 and Proxima b-ag46 lead with 10 bookings each, Close behind, Kepler-452b and other Proxima sites each register nine reservations whichhigh lights interest in exotic worlds. A handful of other planets see seven or eight passengers, showing a healthy spread of curiosity. These insights guide ISTA’s route planning, ensuring we allocate spacecraft and crew where demand is highest while still offering adventures to these destinations.`
+                    `Mars-jn18 and Proxima b-ag46 lead with 10 bookings each. Close behind, Kepler-452b and other Proxima outposts each register nine reservations, highlighting interest in exotic worlds. A handful of destinations see seven or eight passengers, showing a healthy spread of curiosity. These insights guide ISTA’s route planning—allocating spacecraft and crew where demand is highest while still offering adventures across our entire planetary roster.`
                   )}
                   sx={{ mt:1 }}
                 >
@@ -349,7 +363,7 @@ export default function App() {
                 elevation={4}
                 onClick={()=>showInsight(
                   'Missions per Month',
-                  `ISTA’s monthly launches jump from about 50 up to a reliable 120–150 which shows rapid growth and consistent demand. That steady plateau holds across seasons which suggests smooth fleet maintenance and scheduling. We see a slight dip near the period’s end, perhaps due to planned upgrades or seasonal factors. These patterns let ISTA optimize crew rosters, timetable maintenance windows, and plan promotions so every journey remains safe.`
+                  `ISTA’s monthly launches ramp from about 50 to a steady 120–150, reflecting rapid growth and consistent traveler demand. That plateau holds across seasons, indicating smooth fleet maintenance and scheduling. We see a slight dip toward the period’s end—likely due to planned retrofits. Understanding these trends lets ISTA optimize crew rosters, schedule maintenance windows, and plan marketing pushes so every journey remains safe, timely, and fully staffed.`
                 )}
               >
                 <Typography variant="h6">Missions per Month</Typography>
@@ -365,7 +379,7 @@ export default function App() {
                   variant="outlined"
                   onClick={() => showInsight(
                     'Missions per Month',
-                    `ISTA’s monthly launches jump from about 50 up to a reliable 120–150 which shows rapid growth and consistent demand. That steady plateau holds across seasons which suggests smooth fleet maintenance and scheduling. We see a slight dip near the period’s end, perhaps due to planned upgrades or seasonal factors. These patterns let ISTA optimize crew rosters, timetable maintenance windows, and plan promotions so every journey remains safe.`
+                    `ISTA’s monthly launches ramp from about 50 to a steady 120–150, reflecting rapid growth and consistent traveler demand. That plateau holds across seasons, indicating smooth fleet maintenance and scheduling. We see a slight dip toward the period’s end—likely due to planned retrofits. Understanding these trends lets ISTA optimize crew rosters, schedule maintenance windows, and plan marketing pushes so every journey remains safe, timely, and fully staffed.`
                   )}
                   sx={{ mt:1 }}
                 >
@@ -375,7 +389,7 @@ export default function App() {
             </Grid>
           </Grid>
 
-          {/* Insights panel (only on dashboard) */}
+          {/* Insights panel */}
           <Collapse in={insightOpen}>
             <Paper sx={{ mt:2, p:2, background:'#111' }} elevation={3}>
               <Typography variant="h6" sx={{ color:'#66ccff' }}>
